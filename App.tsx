@@ -19,35 +19,44 @@ export type RootDrawerParamList = {
 
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<RootDrawerParamList>();
 
 const Drawer = createDrawerNavigator<RootDrawerParamList>();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={Home} options={{
-          title: "Home",
-          drawerIcon: ({ focused, color, size }) => (
-            <Icon.Feather name="home" size={20} color="black" />
-        )}} />
-        <Drawer.Screen
+     <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'home'
+                : 'home-outline';
+            } else if (route.name === 'About') {
+              iconName = focused ? 'information-circle' : "information-circle-outline";
+            }
+            else if (route.name === 'Contact') {
+              iconName = focused ? 'people' : "people-outline";
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'tomato',
+          tabBarInactiveTintColor: 'gray',
+        })}   
+      >
+        <Tab.Screen name="Home" component={Home}  />
+        <Tab.Screen
           name="About"
           component={About}
-          options={{
-            title: 'About',
-            drawerIcon: ({ focused, color, size }) => (  
-              <Ionicons name={focused ? "information-circle" : "information-circle-outline"} size={size} color={color} />
-            ),
-          }} 
+           
         />
-        <Drawer.Screen name="Contact" component={Contact} options={{
-          title: "Contact",
-          drawerIcon: ({ focused, color, size }) => (
-          <Ionicons name={focused ? "people-outline" : "people-outline"} size={size} color={color} />
-        )}} />
-      </Drawer.Navigator>
+        <Tab.Screen name="Contact" component={Contact}  />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
