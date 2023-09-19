@@ -1,21 +1,21 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
 
-const { verifyPassword } = require("../services/auth");
-const userControllers = require("../controllers/userControllers");
-const authControllers = require("../controllers/authControllers");
+const { verifyPassword } = require('../services/auth');
+const userControllers = require('../controllers/userControllers');
+const authControllers = require('../controllers/authControllers');
 
 /// AUTH ///
 
 router.post(
-  "/api/login",
+  '/api/login',
   authControllers.getUserByEmailWithPasswordAndPassToNext,
-  verifyPassword
+  verifyPassword,
 );
 
-router.get("/api/users", userControllers.getAllUsersFromPrisma);
-router.get("/api/users/:id", userControllers.getOneUserById);
-router.delete("/api/users/:id", userControllers.deleteUserById);
+router.get('/api/users', userControllers.getAllUsersFromPrisma);
+router.get('/api/users/:id', userControllers.getOneUserById);
+router.delete('/api/users/:id', userControllers.deleteUserById);
 
 module.exports = router;

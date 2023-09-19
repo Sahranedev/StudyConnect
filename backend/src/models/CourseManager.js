@@ -1,8 +1,8 @@
-const AbstractManager = require("./AbstractManager");
+const AbstractManager = require('./AbstractManager');
 
 class CourseManager extends AbstractManager {
   constructor() {
-    super({ table: "courses" });
+    super({ table: 'courses' });
   }
 
   find(id) {
@@ -11,7 +11,7 @@ class CourseManager extends AbstractManager {
        FROM ${this.table}
        JOIN teachers as t ON ${this.table}.teacher_id = t.id
        WHERE ${this.table}.id = ?`,
-      [id]
+      [id],
     );
   }
 
@@ -20,7 +20,7 @@ class CourseManager extends AbstractManager {
       `SELECT ${this.table}.id, ${this.table}.name, ${this.table}.description, ${this.table}.teacher_id, ${this.table}.date, ${this.table}.seat_count, t.firstname, t.lastname 
        FROM ${this.table}
        LEFT JOIN teachers as t ON ${this.table}.teacher_id = t.id
-       ORDER BY ${this.table}.id DESC`
+       ORDER BY ${this.table}.id DESC`,
     );
   }
 
@@ -33,7 +33,7 @@ class CourseManager extends AbstractManager {
         course.teacher_id,
         course.date,
         course.seat_count,
-      ]
+      ],
     );
   }
 
@@ -47,14 +47,14 @@ class CourseManager extends AbstractManager {
         course.date,
         course.seat_count,
         course.id,
-      ]
+      ],
     );
   }
 
   delete(id) {
     return this.connection.query(
       `DELETE FROM ${this.table} WHERE ${this.table}.id = ?`,
-      [id]
+      [id],
     );
   }
 }

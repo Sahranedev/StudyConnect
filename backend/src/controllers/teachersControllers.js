@@ -1,5 +1,5 @@
-const models = require("../models");
-const prisma = require("../../prisma/client");
+const models = require('../models');
+const prisma = require('../../prisma/client');
 
 const browse = (req, res) => {
   models.teachers
@@ -31,7 +31,7 @@ const readAllTeachers = async (req, res) => {
   try {
     const getAllTeachers = await prisma.user.findMany({
       where: {
-        role: "Teacher",
+        role: 'Teacher',
       },
       include: {
         teachers: true,
@@ -48,7 +48,7 @@ const readTeacherById = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
     const oneTeacherById = await prisma.user.findUnique({
-      where: { id: id },
+      where: { id },
       include: {
         teacher: {
           select: {
@@ -84,8 +84,8 @@ const createTeachertUser = async (req, res) => {
         lastname,
         email,
         password: hashedPassword,
-        role: "Teacher",
-        status: "Active",
+        role: 'Teacher',
+        status: 'Active',
         teachers: {
           create: {
             qualifications,

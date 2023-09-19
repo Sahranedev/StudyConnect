@@ -1,5 +1,5 @@
-const models = require("../models");
-const prisma = require("../../prisma/client");
+const models = require('../models');
+const prisma = require('../../prisma/client');
 
 const getAllUsersFromPrisma = async (req, res) => {
   try {
@@ -15,7 +15,7 @@ const getOneUserById = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
     const oneUserById = await prisma.user.findUnique({
-      where: { id: id },
+      where: { id },
       select: {
         id: true,
         firstname: true,
@@ -37,8 +37,9 @@ const getOneUserById = async (req, res) => {
 };
 
 const createStudentUser = async (req, res) => {
-  const { firstname, lastname, email, password, progress, curriculum, points } =
-    req.body;
+  const {
+    firstname, lastname, email, password, progress, curriculum, points,
+  } = req.body;
 
   try {
     const user = await prisma.user.create({
@@ -47,8 +48,8 @@ const createStudentUser = async (req, res) => {
         lastname,
         email,
         password,
-        role: "Student",
-        status: "Active",
+        role: 'Student',
+        status: 'Active',
         students: {
           create: {
             progress,
@@ -73,14 +74,14 @@ const deleteUserById = async (req, res) => {
   const { id } = req.params;
 
   if (isNaN(parseInt(id))) {
-    return res.status(400).send("ID invalide");
+    return res.status(400).send('ID invalide');
   }
 
   try {
     const deleteById = await prisma.user.delete({
       where: { id: parseInt(id) },
     });
-    res.status(200).send("Utilisateur supprimé");
+    res.status(200).send('Utilisateur supprimé');
   } catch (error) {
     console.error(error);
     res.sendStatus(500);

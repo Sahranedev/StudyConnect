@@ -1,6 +1,6 @@
-const express = require("express");
-const fs = require("fs");
-const path = require("path");
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 
@@ -8,13 +8,13 @@ const app = express();
 app.use(express.json());
 
 // Servez le dossier public pour les ressources publiques
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Servez l'application REACT
-app.use(express.static(path.join(__dirname, "..", "..", "frontend", "dist")));
+app.use(express.static(path.join(__dirname, '..', '..', 'frontend', 'dist')));
 
 // Charger dynamiquement tous les fichiers de route
-const routesDirectory = path.join(__dirname, "routes");
+const routesDirectory = path.join(__dirname, 'routes');
 fs.readdirSync(routesDirectory).forEach((file) => {
   const route = require(path.join(routesDirectory, file));
   app.use(route);
@@ -23,15 +23,15 @@ fs.readdirSync(routesDirectory).forEach((file) => {
 // Redirigez toutes les requêtes vers l'application REACT
 const reactIndexFile = path.join(
   __dirname,
-  "..",
-  "..",
-  "frontend",
-  "dist",
-  "index.html"
+  '..',
+  '..',
+  'frontend',
+  'dist',
+  'index.html',
 );
 
 if (fs.existsSync(reactIndexFile)) {
-  app.get("*", (req, res) => {
+  app.get('*', (req, res) => {
     res.sendFile(reactIndexFile);
   });
 }

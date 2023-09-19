@@ -1,5 +1,5 @@
-const models = require("../models");
-const prisma = require("../../prisma/client");
+const models = require('../models');
+const prisma = require('../../prisma/client');
 
 const getAllCourses = async (req, res) => {
   try {
@@ -15,7 +15,7 @@ const getCourseById = async (req, res) => {
   try {
     const courseById = await prisma.courses.findUnique({
       where: {
-        id: id,
+        id,
       },
       include: {
         teachers: {
@@ -54,7 +54,7 @@ const getCoursesByTeacher = async (req, res) => {
       },
     });
     if (coursesByTeachers.length === 0) {
-      res.status(404).send("Aucun cours ou professeur correspondant trouvé");
+      res.status(404).send('Aucun cours ou professeur correspondant trouvé');
     } else {
       res.status(200).send(coursesByTeachers);
     }
@@ -63,14 +63,16 @@ const getCoursesByTeacher = async (req, res) => {
   }
 };
 const createCourses = async (req, res) => {
-  const { name, description, teacher_id, date, seat_count } = req.body;
+  const {
+    name, description, teacher_id, date, seat_count,
+  } = req.body;
   try {
     const course = await prisma.courses.create({
       data: {
-        name: name,
-        description: description,
-        teacher_id: teacher_id,
-        seat_count: seat_count,
+        name,
+        description,
+        teacher_id,
+        seat_count,
       },
       include: {
         teachers: {
@@ -114,14 +116,14 @@ const deleteCourseById = async (req, res) => {
   try {
     const deleteCourse = await prisma.courses.delete({
       where: {
-        id: id,
+        id,
       },
     });
-    res.status(200).json({ message: "Cours supprimé", data: deleteCourse });
+    res.status(200).json({ message: 'Cours supprimé', data: deleteCourse });
   } catch (error) {
     console.error(error);
-    if (error.code === "P2025") {
-      res.status(404).send("Aucun cours trouvé");
+    if (error.code === 'P2025') {
+      res.status(404).send('Aucun cours trouvé');
     } else {
       res.sendStatus(500);
     }

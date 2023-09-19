@@ -1,27 +1,27 @@
-const AbstractManager = require("./AbstractManager");
+const AbstractManager = require('./AbstractManager');
 
 class TeachersManager extends AbstractManager {
   constructor() {
-    super({ table: "teachers" });
+    super({ table: 'teachers' });
   }
 
   find(id) {
     return this.connection.query(
       `select id, firstname, lastname, email, city from  ${this.table} where id = ?`,
-      [id]
+      [id],
     );
   }
 
   findByEmailWithPassword(email) {
     return this.connection.query(
       `select * from  ${this.table} where email = ?`,
-      [email]
+      [email],
     );
   }
 
   findAll() {
     return this.connection.query(
-      `select id, firstname, lastname, email from  ${this.table}`
+      `select id, firstname, lastname, email from  ${this.table}`,
     );
   }
 
@@ -34,7 +34,7 @@ class TeachersManager extends AbstractManager {
         teacher.hashedPassword,
         teacher.email,
         teacher.avatar,
-      ]
+      ],
     );
   }
 
@@ -48,7 +48,7 @@ class TeachersManager extends AbstractManager {
         user.city,
         user.hashedPassword,
         user.id,
-      ]
+      ],
     );
   }
 }

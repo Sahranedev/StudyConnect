@@ -1,21 +1,21 @@
-const AbstractManager = require("./AbstractManager");
+const AbstractManager = require('./AbstractManager');
 
 class UserManager extends AbstractManager {
   constructor() {
-    super({ table: "user" });
+    super({ table: 'user' });
   }
 
   find(id) {
     return this.connection.query(
       `select id, firstname, lastname, email, city from  ${this.table} where id = ?`,
-      [id]
+      [id],
     );
   }
 
   findByEmailWithPassword(email) {
     return this.connection.query(
       `select * from  ${this.table} where email = ?`,
-      [email]
+      [email],
     );
   }
 
@@ -33,7 +33,7 @@ class UserManager extends AbstractManager {
         student.email,
         student.role,
         student.hashedPassword,
-      ]
+      ],
     );
   }
 
@@ -47,7 +47,7 @@ class UserManager extends AbstractManager {
         student.avatar,
         student.hashedPassword,
         student.id,
-      ]
+      ],
     );
   }
 }

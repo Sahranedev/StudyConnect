@@ -1,17 +1,17 @@
-const express = require("express");
+const express = require('express');
 
 const router = express.Router();
-const { hashPassword } = require("../services/auth");
+const { hashPassword } = require('../services/auth');
 
-const studentsControllers = require("../controllers/studentsControllers");
+const studentsControllers = require('../controllers/studentsControllers');
 
-router.get("/api/students", studentsControllers.readAllStudents);
+router.get('/api/students', studentsControllers.readAllStudents);
 router.post(
-  "/api/users/students",
+  '/api/users/students',
   hashPassword,
-  studentsControllers.createStudentUser
+  studentsControllers.createStudentUser,
 );
-router.put("/api/students/:id", studentsControllers.edit);
-router.delete("/api/students/:id", studentsControllers.destroy);
+router.put('/api/students/:id', studentsControllers.edit);
+router.delete('/api/students/:id', studentsControllers.destroy);
 
 module.exports = router;

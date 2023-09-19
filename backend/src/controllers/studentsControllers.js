@@ -1,5 +1,5 @@
-const models = require("../models");
-const prisma = require("../../prisma/client");
+const models = require('../models');
+const prisma = require('../../prisma/client');
 
 const createStudentUser = async (req, res) => {
   const {
@@ -19,8 +19,8 @@ const createStudentUser = async (req, res) => {
         lastname,
         email,
         password: hashedPassword,
-        role: "Student",
-        status: "Active",
+        role: 'Student',
+        status: 'Active',
         students: {
           create: {
             progress,
@@ -45,7 +45,7 @@ const readAllStudents = async (req, res) => {
   try {
     const getAllStudents = await prisma.user.findMany({
       where: {
-        role: "Student",
+        role: 'Student',
       },
       include: {
         students: true,

@@ -1,9 +1,9 @@
-const models = require("../models");
+const models = require('../models');
 
 const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
   const { email } = req.body;
-  console.warn("-- enter in authCon");
-  console.warn("Mail ", email);
+  console.warn('-- enter in authCon');
+  console.warn('Mail ', email);
   models.user
     .findByEmailWithPassword(email)
     .then(([users]) => {
@@ -21,8 +21,8 @@ const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
 
 const getProfByEmailWithPasswordAndPassToNext = (req, res, next) => {
   const { email } = req.body;
-  console.warn("-- enter in authCon");
-  console.warn("Mail ", email);
+  console.warn('-- enter in authCon');
+  console.warn('Mail ', email);
   models.professor
     .findByEmailWithPassword(email)
     .then(([professor]) => {

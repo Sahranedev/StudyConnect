@@ -1,5 +1,5 @@
-const argon2 = require("argon2");
-const jwt = require("jsonwebtoken");
+const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET, JWT_TIMING } = process.env;
 
@@ -30,7 +30,7 @@ const verifyPassword = (req, res) => {
     .then((isVerified) => {
       if (isVerified) {
         const token = jwt.sign({ sub: req.user.id }, JWT_SECRET, {
-          algorithm: "HS512",
+          algorithm: 'HS512',
           expiresIn: JWT_TIMING,
         });
         delete req.user.password;
@@ -46,12 +46,11 @@ const verifyPassword = (req, res) => {
 const verifyToken = (req, res, next) => {
   try {
     const autorizationHeader = req.headers.authorization;
-    if (!autorizationHeader)
-      throw new Error("Autorization needed for this route");
+    if (!autorizationHeader) throw new Error('Autorization needed for this route');
 
-    const [type, token] = autorizationHeader.split(" ");
-    if (type !== "Bearer") throw new Error("Only Bearer token allowed");
-    if (!token) throw new Error("Token needed");
+    const [type, token] = autorizationHeader.split(' ');
+    if (type !== 'Bearer') throw new Error('Only Bearer token allowed');
+    if (!token) throw new Error('Token needed');
 
     req.payloads = jwt.verify(token, JWT_SECRET);
     next();
