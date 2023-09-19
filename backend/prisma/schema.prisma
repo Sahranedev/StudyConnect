@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model chatGroups {
+  id        Int        @id @default(autoincrement())
+  course_id Int?
+  name      String?    @db.VarChar(50)
+  courses   courses?   @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "chatGroups_ibfk_1")
+  messages  messages[]
+
+  @@index([course_id], map: "course_id")
+}
+
+model courses {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(50)
+  description String?       @db.Text
+  teacher_id  Int
+  date        DateTime?     @db.Date
+  seat_count  Int?
+  chatGroups  chatGroups[]
+  teachers    teachers?     @relation(fields: [teacher_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "courses_ibfk_1")
+  enrollments enrollments[]
+
+  @@index([teacher_id], map: "teacher_id")
+}
+
+model enrollments {
+  id              Int       @id @default(autoincrement())
+  student_id      Int
+  course_id       Int
+  enrollment_date DateTime? @db.DateTime(0)
+  students        students? @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "enrollments_ibfk_1")
+  courses         courses?  @relation(fields: [course_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "enrollments_ibfk_2")
+
+  @@index([course_id], map: "course_id")
+  @@index([student_id], map: "student_id")
+}
+
+model messageReadStatus {
+  message_id    Int
+  user_id       Int
+  isRead        Boolean?  @default(false)
+  readTimestamp DateTime? @db.DateTime(0)
+  messages      messages  @relation(fields: [message_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "messageReadStatus_ibfk_1")
+  user          user      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "messageReadStatus_ibfk_2")
+
+  @@id([message_id, user_id])
+  @@index([user_id], map: "user_id")
+}
+
+model messages {
+  id                Int                 @id @default(autoincrement())
+  chatGroup_id      Int?
+  user_id           Int?
+  content           String?             @db.Text
+  timestamp         DateTime?           @default(now()) @db.DateTime(0)
+  messageReadStatus messageReadStatus[]
+  chatGroups        chatGroups?         @relation(fields: [chatGroup_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "messages_ibfk_1")
+  user              user?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "messages_ibfk_2")
+
+  @@index([chatGroup_id], map: "chatGroup_id")
+  @@index([user_id], map: "user_id")
+}
+
+model notificationReadStatus {
+  notification_id Int
+  user_id         Int
+  isRead          Boolean?      @default(false)
+  readTimestamp   DateTime?     @db.DateTime(0)
+  notifications   notifications @relation(fields: [notification_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "notificationReadStatus_ibfk_1")
+  user            user          @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "notificationReadStatus_ibfk_2")
+
+  @@id([notification_id, user_id])
+  @@index([user_id], map: "user_id")
+}
+
+model notifications {
+  id                     Int                      @id @default(autoincrement())
+  content                String?                  @db.Text
+  type                   notifications_type?
+  timestamp              DateTime?                @default(now()) @db.DateTime(0)
+  notificationReadStatus notificationReadStatus[]
+}
+
+model students {
+  id           Int           @id @default(autoincrement())
+  userID       Int
+  progress     String?       @db.Text
+  lastActivity DateTime?     @db.DateTime(0)
+  curriculum   String?       @db.VarChar(100)
+  points       Int?
+  enrollments  enrollments[]
+  user         user?         @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "students_ibfk_1")
+
+  @@index([userID], map: "userID")
+}
+
+model teachers {
+  id             Int       @id @default(autoincrement())
+  userID         Int
+  qualifications String?   @db.Text
+  bio            String?   @db.Text
+  expertiseField String?   @db.VarChar(100)
+  hourlyRate     Decimal?  @db.Decimal(10, 2)
+  averageRating  Decimal?  @db.Decimal(3, 2)
+  courses        courses[]
+  user           user?     @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "teachers_ibfk_1")
+
+  @@index([userID], map: "userID")
+}
+
+model user {
+  id                     Int                      @id @default(autoincrement())
+  firstname              String                   @db.VarChar(255)
+  lastname               String                   @db.VarChar(255)
+  email                  String                   @unique @db.VarChar(50)
+  avatar                 String?                  @db.VarChar(255)
+  password               String                   @db.VarChar(255)
+  role                   user_role
+  createdAt              DateTime                 @default(now()) @db.DateTime(0)
+  lastLogin              DateTime?                @db.DateTime(0)
+  status                 user_status?
+  preferredLanguage      String?                  @db.VarChar(10)
+  messageReadStatus      messageReadStatus[]
+  messages               messages[]
+  notificationReadStatus notificationReadStatus[]
+  students               students[]
+  teachers               teachers[]
+}
+
+enum notifications_type {
+  Annulation
+  D_calage   @map("Décalage")
+  Autre
+}
+
+enum user_role {
+  Admin
+  Teacher
+  Student
+}
+
+enum user_status {
+  Active
+  Inactive
+  Banned
+}
