@@ -1,9 +1,17 @@
-const models = require('../models');
-const prisma = require('../../prisma/client');
+const models = require("../models");
+const prisma = require("../../prisma/client");
 
 const getAllCourses = async (req, res) => {
   try {
-    const getCourses = await prisma.courses.findMany();
+    const getCourses = await prisma.courses.findMany({
+      include: {
+        teachers: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
     res.status(200).send(getCourses);
   } catch (error) {
     console.error(error);
@@ -54,7 +62,7 @@ const getCoursesByTeacher = async (req, res) => {
       },
     });
     if (coursesByTeachers.length === 0) {
-      res.status(404).send('Aucun cours ou professeur correspondant trouvé');
+      res.status(404).send("Aucun cours ou professeur correspondant trouvé");
     } else {
       res.status(200).send(coursesByTeachers);
     }
@@ -63,9 +71,7 @@ const getCoursesByTeacher = async (req, res) => {
   }
 };
 const createCourses = async (req, res) => {
-  const {
-    name, description, teacher_id, date, seat_count,
-  } = req.body;
+  const { name, description, teacher_id, date, seat_count } = req.body;
   try {
     const course = await prisma.courses.create({
       data: {
@@ -89,26 +95,26 @@ const createCourses = async (req, res) => {
   }
 };
 
-const edit = (req, res) => {
-  const course = req.body;
+const updateCourse = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { name, description, seat_count } = req.body;
 
-  // TODO validations (length, format...)
-
-  course.id = parseInt(req.params.id, 10);
-
-  models.courses
-    .update(course)
-    .then(([result]) => {
-      if (result.affectedRows === 0) {
-        res.sendStatus(404);
-      } else {
-        res.sendStatus(204);
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
+  try {
+    const course = await prisma.courses.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        description: description,
+        seat_count: seat_count,
+      },
     });
+    res.status(200).json(course);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
 };
 
 const deleteCourseById = async (req, res) => {
@@ -119,11 +125,11 @@ const deleteCourseById = async (req, res) => {
         id,
       },
     });
-    res.status(200).json({ message: 'Cours supprimé', data: deleteCourse });
+    res.status(200).json({ message: "Cours supprimé", data: deleteCourse });
   } catch (error) {
     console.error(error);
-    if (error.code === 'P2025') {
-      res.status(404).send('Aucun cours trouvé');
+    if (error.code === "P2025") {
+      res.status(404).send("Aucun cours trouvé");
     } else {
       res.sendStatus(500);
     }
@@ -131,10 +137,10 @@ const deleteCourseById = async (req, res) => {
 };
 
 module.exports = {
-  edit,
   createCourses,
   getAllCourses,
   getCoursesByTeacher,
   getCourseById,
   deleteCourseById,
+  updateCourse,
 };

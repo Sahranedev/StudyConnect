@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 
 const CardCourse = ({ course }: any) => {
+  console.log(course)
     const styles = StyleSheet.create({
         courseContainer: {
             backgroundColor: '#F9FAFC',
@@ -35,7 +36,7 @@ const CardCourse = ({ course }: any) => {
                 <Text style={styles.titre}>{course.name}</Text>
               <Text style={styles.langage}>langage : {course.language} </Text>
               <Text style={styles.description}>Description : Nous allons voir les fonctions dans les requêtes sql</Text>
-              <Text style={styles.description}>Dispensé par : {course.firstname} {course.lastname} </Text>
+              <Text style={styles.description}>Dispensé par : {course.teachers.user.firstname} {course.teachers.user.lastname} </Text>
               
       </View>
     </View>

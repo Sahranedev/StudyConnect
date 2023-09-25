@@ -1,5 +1,5 @@
-const models = require('../models');
-const prisma = require('../../prisma/client');
+const models = require("../models");
+const prisma = require("../../prisma/client");
 
 const browse = (req, res) => {
   models.enrollments
@@ -26,15 +26,12 @@ const getEnrollements = async (req, res) => {
 const getEnrollmentById = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
-    const enrollment = await prisma.enrollments.delete({
+    const enrollment = await prisma.enrollments.findUnique({
       where: {
-        id,
+        id: id,
       },
     });
-    res.status(201).json({
-      message: 'Vous vous êtes désinscris du cours',
-      data: enrollment,
-    });
+    res.status(200).send(enrollment);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
@@ -46,13 +43,13 @@ const takeEnrollements = async (req, res) => {
   try {
     const enrollements = await prisma.enrollments.create({
       data: {
-        student_id,
-        course_id,
-        enrollment_date,
+        student_id: student_id,
+        course_id: course_id,
+        enrollment_date: enrollment_date,
       },
     });
     res.status(201).json({
-      message: 'Votre incription au cours a été correctement pris',
+      message: "Votre incription au cours a été correctement pris",
       data: enrollements,
     });
   } catch (error) {
@@ -139,4 +136,5 @@ module.exports = {
   destroy,
   getEnrollements,
   takeEnrollements,
+  getEnrollmentById,
 };
