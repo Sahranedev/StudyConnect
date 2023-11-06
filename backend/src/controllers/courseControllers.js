@@ -1,4 +1,3 @@
-const models = require("../models");
 const prisma = require("../../prisma/client");
 
 const getAllCourses = async (req, res) => {

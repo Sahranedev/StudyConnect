@@ -1,5 +1,5 @@
-const models = require('../models');
-const prisma = require('../../prisma/client');
+const models = require("../models");
+const prisma = require("../../prisma/client");
 
 const createStudentUser = async (req, res) => {
   const {
@@ -19,8 +19,8 @@ const createStudentUser = async (req, res) => {
         lastname,
         email,
         password: hashedPassword,
-        role: 'Student',
-        status: 'Active',
+        role: "Student",
+        status: "Active",
         students: {
           create: {
             progress,
@@ -45,7 +45,7 @@ const readAllStudents = async (req, res) => {
   try {
     const getAllStudents = await prisma.user.findMany({
       where: {
-        role: 'Student',
+        role: "Student",
       },
       include: {
         students: true,
@@ -57,6 +57,44 @@ const readAllStudents = async (req, res) => {
     res.sendStatus(500);
   }
 };
+
+const updateStudentUser = async (req, res) => {
+  const { id } = parseInt(req.params.id);
+  const { firstname, lastname, email, progress, curriculum, points } = req.body;
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: id },
+      data: {
+        firstname,
+        lastname,
+        email,
+
+        students: {
+          update: {
+            data: {
+              progress,
+              curriculum,
+              points,
+            },
+            where: {
+              userID: id,
+            },
+          },
+        },
+      },
+      include: {
+        students: true,
+      },
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+};
+
 const browse = (req, res) => {
   models.students
     .findAll()
@@ -131,11 +169,7 @@ const destroy = (req, res) => {
 };
 
 module.exports = {
-  browse,
-  read,
-  add,
-  edit,
-  destroy,
   createStudentUser,
   readAllStudents,
+  updateStudentUser,
 };

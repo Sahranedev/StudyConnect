@@ -30,6 +30,13 @@ const getEnrollmentById = async (req, res) => {
       where: {
         id: id,
       },
+      include: {
+        students: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
     res.status(200).send(enrollment);
   } catch (error) {
