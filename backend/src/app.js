@@ -4,13 +4,10 @@ const path = require("path");
 
 const app = express();
 
-// Utilisez des middlewares au niveau de l'application
 app.use(express.json());
 
-// Servez le dossier public pour les ressources publiques
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Servez l'application REACT
 app.use(express.static(path.join(__dirname, "..", "..", "frontend", "dist")));
 
 const routesDirectory = path.join(__dirname, "routes");
@@ -19,7 +16,6 @@ fs.readdirSync(routesDirectory).forEach((file) => {
   app.use(route);
 });
 
-// Redirigez toutes les requêtes vers l'application REACT
 const reactIndexFile = path.join(
   __dirname,
   "..",
