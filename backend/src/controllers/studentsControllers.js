@@ -58,6 +58,22 @@ const readAllStudents = async (req, res) => {
   }
 };
 
+const readStudentById = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const student = await prisma.students.findUnique({
+      where: { id: id },
+      include: {
+        user: true,
+      },
+    });
+    res.status(200).send(student);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+};
+
 const updateStudentUser = async (req, res) => {
   const { id } = parseInt(req.params.id);
   const { firstname, lastname, email, progress, curriculum, points } = req.body;
@@ -171,5 +187,6 @@ const destroy = (req, res) => {
 module.exports = {
   createStudentUser,
   readAllStudents,
+  readStudentById,
   updateStudentUser,
 };

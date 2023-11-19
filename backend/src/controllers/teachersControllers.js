@@ -47,18 +47,17 @@ const readAllTeachers = async (req, res) => {
 const readTeacherById = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
-    const oneTeacherById = await prisma.user.findUnique({
+    const teacher = await prisma.teachers.findUnique({
       where: { id: id },
       include: {
-        teacher: {
-          select: {
-            bio: true,
-            expertiseField: true,
-          },
-        },
+        user: true,
       },
     });
-    res.status(200).send(oneTeacherById);
+    if (teacher) {
+      res.status(200).send(teacher);
+    } else {
+      res.status(404).send({ message: "Teacher not found" });
+    }
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
