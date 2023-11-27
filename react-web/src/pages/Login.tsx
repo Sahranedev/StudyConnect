@@ -70,11 +70,13 @@ export default function Login() {
         >
           <Input
             placeholder="Adresse Email"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             placeholder="Mot de passe"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -102,7 +104,8 @@ export default function Login() {
       </p>
 
       <div className="flex justify-center mt-4">
-        <Button
+        <Button 
+          onClick={() => navigate("/sign-up")}
           variant="outline"
           className=" w-56 rounded-full text-xl border-4 border-black"
         >

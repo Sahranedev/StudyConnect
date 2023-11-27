@@ -3,7 +3,7 @@ import { User, Teacher, Student } from "../interfaces/User";
 import useLocalStorage from "../LocalStorage/useLocalStorage";
 
 interface CurrentUserContextType {
-  user: User | Student | Teacher;
+  user: User | Student | Teacher ;
   setUser: React.Dispatch<React.SetStateAction<User | Student | Teacher>>;
   token: string;
   setToken: React.Dispatch<React.SetStateAction<string>>;
@@ -32,6 +32,7 @@ export const CurrentUserContextProvider: React.FunctionComponent<CurrentUserCont
       setUser,
       token,
       setToken,
+      defaultValue
     }),
     [user, token]
   );

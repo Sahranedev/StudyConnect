@@ -1,0 +1,15 @@
+{
+  "name": "code_lingo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -n \"REACT-WEB,BACKEND\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev --prefix react-web\" \"npm run dev --prefix backend\""
+
+  },
+  "author": "Sahrane Guassemi",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
