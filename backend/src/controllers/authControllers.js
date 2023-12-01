@@ -1,9 +1,9 @@
-const models = require('../models');
+const models = require("../models");
 
 const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
   const { email } = req.body;
-  console.warn('-- enter in authCon');
-  console.warn('Mail ', email);
+  console.warn("-- enter in authCon");
+  console.warn("Mail ", email);
   models.user
     .findByEmailWithPassword(email)
     .then(([users]) => {
@@ -19,26 +19,6 @@ const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
     });
 };
 
-const getProfByEmailWithPasswordAndPassToNext = (req, res, next) => {
-  const { email } = req.body;
-  console.warn('-- enter in authCon');
-  console.warn('Mail ', email);
-  models.professor
-    .findByEmailWithPassword(email)
-    .then(([professor]) => {
-      console.warn(professor);
-      if (professor[0]) {
-        [req.professor] = professor;
-        next();
-      } else res.sendStatus(401);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
-    });
-};
-
 module.exports = {
   getUserByEmailWithPasswordAndPassToNext,
-  getProfByEmailWithPasswordAndPassToNext,
 };
