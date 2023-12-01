@@ -69,6 +69,52 @@ const getCoursesByTeacher = async (req, res) => {
     console.error(error);
   }
 };
+
+const getCoursesByStudent = async (req, res) => {
+  const studentId = parseInt(req.params.id);
+  try {
+    const studentEnrollments = await prisma.enrollments.findMany({
+      where: {
+        student_id: studentId,
+      },
+      include: {
+        students: {
+          select: {
+            user: {
+              select: {
+                firstname: true,
+                lastname: true,
+                email: true,
+              },
+            },
+          },
+        },
+        courses: {
+          include: {
+            teachers: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (studentEnrollments.length === 0) {
+      res.status(404).send("Aucun cours inscrit pour cet étudiant");
+    } else {
+      const studentDetails = studentEnrollments[0].students.user;
+      const courses = studentEnrollments.map(
+        (enrollment) => enrollment.courses
+      );
+      res.status(200).send({ studentDetails, courses });
+    }
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+};
+
 const createCourses = async (req, res) => {
   const { name, description, teacher_id, date, seat_count } = req.body;
   try {
@@ -139,6 +185,7 @@ module.exports = {
   createCourses,
   getAllCourses,
   getCoursesByTeacher,
+  getCoursesByStudent,
   getCourseById,
   deleteCourseById,
   updateCourse,
