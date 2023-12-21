@@ -10,4 +10,9 @@ router.get("/api/enrollments/:id", enrollmentControllers.getEnrollmentById);
 router.post("/api/enrollments", enrollmentControllers.takeEnrollements);
 router.post("/api/enrollments", enrollmentControllers.takeEnrollements);
 
+router.delete(
+  "/api/enrollments/:id",
+  enrollmentControllers.deleteEnrollmentById
+);
+
 module.exports = router;

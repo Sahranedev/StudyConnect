@@ -1,8 +1,12 @@
-import React, { StrictMode } from "react";
+import  { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Routes from "./index";
 import { CurrentUserContextProvider } from "./context/UserContext";
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const router = createBrowserRouter(Routes);
 
@@ -21,7 +25,9 @@ root.render(
 
       <RouterProvider router={router} />
       
-      </CurrentUserContextProvider>
+    </CurrentUserContextProvider>
+    <ToastContainer />
+    
 
         
    

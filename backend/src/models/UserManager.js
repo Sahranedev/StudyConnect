@@ -14,9 +14,10 @@ class UserManager extends AbstractManager {
 
   findByEmailWithPassword(email) {
     return this.connection.query(
-      `SELECT u.*, s.id AS student_id, s.progress, s.lastActivity, s.curriculum, s.points, s.classroom_id
+      `SELECT u.*, s.id AS student_id, s.progress, s.lastActivity, s.curriculum, s.points, s.classroom_id, t.id AS teacher_id
       FROM ${this.table} u
       LEFT JOIN students s ON u.id = s.userID
+      LEFT JOIN teachers t ON u.id = t.userID
       WHERE u.email = ?`,
       [email]
     );

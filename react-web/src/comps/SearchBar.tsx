@@ -4,16 +4,7 @@ import { IoSearchOutline } from "react-icons/io5";
 
 const SearchBar = () => {
     return (
-   /*    <div className="flex justify-center mt-3">
-            
-    <Input
-        type="search"
-        placeholder="Search..."
-        className=" w-10/12 rounded-full bg-[#2B2B2B] h-12 text-white"
-        
-            />
-            <div className="h-12 w-12 bg-gray-300"></div>
-        </div> */
+   
         <div className="flex justify-center mt-2">
 
         <div className="bg-zinc-300 flex items-stretch gap-5 pr-5 rounded-3xl w-10/12">

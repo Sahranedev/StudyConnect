@@ -1,11 +1,16 @@
+
 import App from "./App";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/StudentPages/HomePage";
 import Login from "./pages/Login";
 import MyCourses from "./pages/MyCourses";
-import { Navigate } from "react-router-dom";
 import SignUp from "./pages/SignUp";
 import ClassRoom from "./pages/ClassRoom";
 import Profile from "./pages/Profile";
+import TeacherRoute from "./Routes/TeacherRoute";
+import StudentRoute from "./Routes/StudentRoute";
+import TeacherCourses from "./pages/TeacherPages/TeacherCourses";
+import TeacherHomePage from "./pages/TeacherPages/TeacherHomePage";
+import RoleRedirect from "./Services/RoleRedirect";
 
 const Routes = [
   {
@@ -14,24 +19,50 @@ const Routes = [
     children: [
       {
         path: "/",
-        element: <Navigate to="/home-page" replace />,
+        element: <RoleRedirect />,
       },
       {
-        path: "home-page",
+        path: "/etudiant/home-page",
         element: <HomePage />,
       },
       {
-        path: "mes-cours",
-        element: <MyCourses />,
-      },
-      {
-        path: "ma-classe",
-        element: <ClassRoom />
-      },
-      {
         path: "mon-profile",
-        element: <Profile />
-      }
+        element: <Profile />,
+      },
+      {
+        path: "/etudiant/mes-cours",
+        element: (
+          <StudentRoute>
+            <MyCourses />
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "/etudiant/ma-classe",
+        element: (
+          <StudentRoute>
+            <ClassRoom />
+          </StudentRoute>
+        ),
+      },
+      {
+        path: "/professeur/home-page",
+        element: (
+          <TeacherRoute>
+            <TeacherHomePage />
+          </TeacherRoute>
+        )
+
+      },
+    
+      {
+        path: "/professeur/mes-cours",
+        element: (
+          <TeacherRoute>
+            <TeacherCourses />
+          </TeacherRoute>
+        ),
+      },
     ],
   },
   {

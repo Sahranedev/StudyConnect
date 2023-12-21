@@ -1,16 +1,18 @@
 import React, { createContext, useContext, useMemo, ReactNode } from "react";
-import { User, Teacher, Student } from "../interfaces/User";
+import { BaseUser, Teacher, Student } from "../interfaces/User";
 import useLocalStorage from "../LocalStorage/useLocalStorage";
+import { UserType } from "../interfaces/User";
+
 
 interface CurrentUserContextType {
-  user: User | Student | Teacher ;
-  setUser: React.Dispatch<React.SetStateAction<User | Student | Teacher>>;
+  user: UserType;
+  setUser: React.Dispatch<React.SetStateAction<BaseUser | Student | Teacher>>;
   token: string;
   setToken: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const defaultValue: CurrentUserContextType = {
-  user: {} as User, 
+  user: {} as UserType, 
   setUser: () => {},
   token: "",
   setToken: () => {},
@@ -23,7 +25,7 @@ interface CurrentUserContextProviderProps {
 }
 
 export const CurrentUserContextProvider: React.FunctionComponent<CurrentUserContextProviderProps> = ({ children }) => {
-  const [user, setUser] = useLocalStorage("user", defaultValue.user);
+  const [user, setUser] = useLocalStorage<UserType>("user", defaultValue.user);
   const [token, setToken] = useLocalStorage("token", defaultValue.token);
 
   const value = useMemo(
