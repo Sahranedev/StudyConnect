@@ -37,7 +37,8 @@ const createStudentUser = async (req, res) => {
     res.status(201).json(user);
   } catch (error) {
     console.error(error);
-    res.sendStatus(500);
+
+    res.sendStatus(400);
   }
 };
 
@@ -94,7 +95,7 @@ const updateStudentUser = async (req, res) => {
               points,
             },
             where: {
-              userID: id,
+              user_id: id,
             },
           },
         },
@@ -111,77 +112,58 @@ const updateStudentUser = async (req, res) => {
   }
 };
 
-const browse = (req, res) => {
-  models.students
-    .findAll()
-    .then(([results]) => {
-      res.send(results);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
+const deleteStudentById = async (req, res) => {
+  const student_id = parseInt(req.params.id);
+
+  try {
+    const student = await prisma.students.findUnique({
+      where: { id: student_id },
     });
+
+    if (!student) {
+      return res
+        .status(404)
+        .send(`Aucun étudiant trouvé avec l'ID ${student_id}`);
+    }
+
+    await prisma.user.delete({
+      where: { id: student.user_id },
+    });
+
+    res.status(200).send(`L'étudiant avec l'ID ${student_id} a été supprimé`);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send("Une erreur s'est produite lors de la suppression de l'étudiant");
+  }
 };
 
-const read = (req, res) => {
-  const { id } = req.params;
-
-  models.students
-    .find(id)
-    .then(([results]) => {
-      if (results[0]) res.send(results[0]);
-      else res.sendStatus(404);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
+const deleteAllStudents = async (req, res) => {
+  try {
+    await prisma.enrollments.deleteMany({
+      where: {
+        students: {
+          user: {
+            role: "Student",
+          },
+        },
+      },
     });
-};
 
-const add = (req, res) => {
-  const student = req.body;
-
-  // on verifie les données
-
-  models.students
-    .insert(student)
-    .then(([result]) => {
-      res.location(`/api/users/${result.insertId}`).sendStatus(201);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
+    const result = await prisma.user.deleteMany({
+      where: {
+        role: "Student",
+      },
     });
-};
 
-const edit = (req, res) => {
-  const student = req.body;
-  student.id = req.params.id;
-
-  models.students
-    .update(student)
-    .then(([result]) => {
-      if (result.affectedRows === 0) res.sendStatus(404);
-      else res.sendStatus(204);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
-    });
-};
-
-const destroy = (req, res) => {
-  const { id } = req.params;
-  models.students
-    .delete(id)
-    .then(([result]) => {
-      if (result.affectedRows === 0) res.sendStatus(404);
-      else res.sendStatus(204);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
-    });
+    res.status(200).send(`${result.count} étudiants ont été supprimés`);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send("Une erreur s'est produite lors de la suppression des étudiants");
+  }
 };
 
 module.exports = {
@@ -189,4 +171,6 @@ module.exports = {
   readAllStudents,
   readStudentById,
   updateStudentUser,
+  deleteAllStudents,
+  deleteStudentById,
 };

@@ -69,11 +69,11 @@ const getCourseById = async (req, res) => {
   }
 };
 const getCoursesByTeacher = async (req, res) => {
-  const teacherId = parseInt(req.params.id);
+  const teacher_id = parseInt(req.params.id);
   try {
     const coursesByTeachers = await prisma.courses.findMany({
       where: {
-        teacher_id: teacherId,
+        teacher_id: teacher_id,
       },
       include: {
         teachers: {
@@ -94,10 +94,10 @@ const getCoursesByTeacher = async (req, res) => {
 };
 
 const getCoursesByStudent = async (req, res) => {
-  const studentId = parseInt(req.params.id);
+  const student_id = parseInt(req.params.id);
   try {
     const studentEnrollments = await prisma.enrollments.findMany({
-      where: { student_id: studentId },
+      where: { student_id: student_id },
       include: {
         students: {
           select: {
@@ -144,14 +144,14 @@ const getCoursesByStudent = async (req, res) => {
 };
 
 const getCoursesByStudentForToday = async (req, res) => {
-  const studentId = parseInt(req.params.id);
+  const student_id = parseInt(req.params.id);
   const todayStart = formatISO(startOfDay(new Date()));
   const todayEnd = formatISO(endOfDay(new Date()));
 
   try {
     const studentEnrollments = await prisma.enrollments.findMany({
       where: {
-        student_id: studentId,
+        student_id: student_id,
         courses: {
           date: {
             gte: todayStart,
@@ -206,7 +206,7 @@ const getCoursesByStudentForToday = async (req, res) => {
 };
 
 const getAllStudentCoursesFor7NextDays = async (req, res) => {
-  const studentId = parseInt(req.params.id);
+  const student_id = parseInt(req.params.id);
   const tomorrow = addDays(new Date(), 1);
   const endOfSevenDaysFromTomorrow = addDays(new Date(), 8);
   const startOfTomorrow = formatISO(startOfDay(tomorrow));
@@ -215,7 +215,7 @@ const getAllStudentCoursesFor7NextDays = async (req, res) => {
   try {
     const studentEnrollments = await prisma.enrollments.findMany({
       where: {
-        student_id: studentId,
+        student_id: student_id,
         AND: [
           { enrollment_date: { gte: startOfTomorrow } },
           { enrollment_date: { lte: endOfSevenDays } },
@@ -252,14 +252,14 @@ const getAllStudentCoursesFor7NextDays = async (req, res) => {
 };
 
 const getTeacherCoursesForToday = async (req, res) => {
-  const teacherId = parseInt(req.params.id);
+  const teacher_id = parseInt(req.params.id);
   const todayStart = startOfDay(new Date());
   const todayEnd = endOfDay(new Date());
 
   try {
     const todayCourses = await prisma.courses.findMany({
       where: {
-        teacher_id: teacherId,
+        teacher_id: teacher_id,
         date: {
           gte: todayStart,
           lte: todayEnd,
@@ -282,14 +282,14 @@ const getTeacherCoursesForToday = async (req, res) => {
 };
 
 const getTeacherCoursesForNext7Days = async (req, res) => {
-  const teacherId = parseInt(req.params.id);
+  const teacher_id = parseInt(req.params.id);
   const tomorrowStart = startOfDay(addDays(new Date(), 1));
   const next7DaysEnd = endOfDay(addDays(new Date(), 7));
 
   try {
     const next7DaysCourses = await prisma.courses.findMany({
       where: {
-        teacher_id: teacherId,
+        teacher_id: teacher_id,
         date: {
           gte: tomorrowStart,
           lte: next7DaysEnd,
