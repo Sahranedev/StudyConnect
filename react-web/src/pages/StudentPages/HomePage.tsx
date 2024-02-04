@@ -24,7 +24,6 @@ const HomePage = () => {
     student_id: user.student_id,
     course_id:  null
   })
-
   const toastSuccesEnrollement = () => {
     toast.success("Bien inscrit au cours",
       {

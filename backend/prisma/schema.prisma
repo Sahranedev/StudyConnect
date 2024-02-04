@@ -11,31 +11,30 @@ model classroom {
   id             Int            @id @default(autoincrement())
   name           String         @db.VarChar(50)
   students       students[]
-  teachers       teachers[]
   teacherClasses TeacherClass[]
-  courses        courses?       @relation(fields: [coursesId], references: [id])
-  coursesId      Int?
+  courses        courses[]
 }
 
 model courses {
-  id          Int           @id @default(autoincrement())
-  name        String        @db.VarChar(50)
-  description String?       @db.Text
-  teacher_id  Int
-  date        DateTime?     @db.Date
-  start_time  DateTime?     @db.Time
-  end_time    DateTime?     @db.Time
-  seat_count  Int?
-  teachers    teachers?     @relation(fields: [teacher_id], references: [id])
-  enrollments enrollments[]
-  classroom   classroom[]
+  id           Int           @id @default(autoincrement())
+  name         String        @db.VarChar(50)
+  description  String?       @db.Text
+  teacher_id   Int
+  date         DateTime?     @db.Date
+  start_time   DateTime?     @db.Time
+  end_time     DateTime?     @db.Time
+  seat_count   Int?
+  teachers     teachers?     @relation(fields: [teacher_id], references: [id])
+  enrollments  enrollments[]
+  classroom    classroom?    @relation(fields: [classroom_id], references: [id])
+  classroom_id Int?
 }
 
 model enrollments {
   id              Int       @id @default(autoincrement())
-  student_id      Int
-  course_id       Int
   enrollment_date DateTime? @db.DateTime(0)
+  course_id       Int
+  student_id      Int
   students        students? @relation(fields: [student_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "enrollments_ibfk_1")
   courses         courses?  @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "enrollments_ibfk_2")
 
@@ -45,10 +44,10 @@ model enrollments {
 
 model messages {
   id           Int       @id @default(autoincrement())
-  chatGroup_id Int?
-  user_id      Int?
   content      String?   @db.Text
   timestamp    DateTime? @default(now()) @db.DateTime(0)
+  chatGroup_id Int?
+  user_id      Int?
   user         user?     @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "messages_ibfk_2")
 
   @@index([chatGroup_id], map: "chatGroup_id")
@@ -64,44 +63,41 @@ model notifications {
 
 model students {
   id           Int           @id @default(autoincrement())
-  userID       Int
   progress     String?       @db.Text
   lastActivity DateTime?     @db.DateTime(0)
   curriculum   String?       @db.VarChar(100)
   points       Int?
+  classroom    classroom?    @relation(fields: [classroom_id], references: [id])
   classroom_id Int?
-  classroom    classroom[]
+  user_id      Int
   enrollments  enrollments[]
-  user         user?         @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "students_ibfk_1")
+  user         user?         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "students_ibfk_1")
 
-  @@index([userID], map: "userID")
+  @@index([user_id], map: "user_id")
 }
 
 model teachers {
   id             Int            @id @default(autoincrement())
-  userID         Int
+  user_id        Int
   qualifications String?        @db.Text
   bio            String?        @db.Text
   expertiseField String?        @db.VarChar(100)
   hourlyRate     Decimal?       @db.Decimal(10, 2)
   averageRating  Decimal?       @db.Decimal(3, 2)
   courses        courses[]
-  user           user?          @relation(fields: [userID], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "teachers_ibfk_1")
+  user           user?          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "teachers_ibfk_1")
   teacherClasses TeacherClass[]
-  classroom      classroom?     @relation(fields: [classroomId], references: [id])
-  classroomId    Int?
 
-  @@index([userID], map: "userID")
+  @@index([user_id], map: "user_id")
 }
 
 model TeacherClass {
-  teacherId   Int
-  classroomId Int
-  classroom   classroom @relation(fields: [classroomId], references: [id])
-  teachers    teachers? @relation(fields: [teachersId], references: [id])
-  teachersId  Int?
+  teacher_id   Int
+  classroom_id Int
+  classroom    classroom @relation(fields: [classroom_id], references: [id])
+  teachers     teachers  @relation(fields: [teacher_id], references: [id])
 
-  @@id([teacherId, classroomId])
+  @@id([teacher_id, classroom_id])
 }
 
 model user {

@@ -13,14 +13,22 @@ class UserManager extends AbstractManager {
   }
 
   findByEmailWithPassword(email) {
-    return this.connection.query(
-      `SELECT u.*, s.id AS student_id, s.progress, s.lastActivity, s.curriculum, s.points, s.classroom_id, t.id AS teacher_id
+    console.log("je suis dans findByEmailWithPassword : ", email);
+    return this.connection
+      .query(
+        `SELECT u.*, s.id AS student_id, s.progress, s.lastActivity, s.curriculum, s.points, s.classroom_id, t.id AS teacher_id
       FROM ${this.table} u
-      LEFT JOIN students s ON u.id = s.userID
-      LEFT JOIN teachers t ON u.id = t.userID
+      LEFT JOIN students s ON u.id = s.user_id
+      LEFT JOIN teachers t ON u.id = t.user_id
       WHERE u.email = ?`,
-      [email]
-    );
+        [email]
+      )
+      .then(([results, fields]) => {
+        return results[0];
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 
   findAll() {

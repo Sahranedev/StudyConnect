@@ -3,7 +3,17 @@ export type RootDrawerParamList = {
     MesCours: undefined;
     Contact: { sort: 'latest' | 'top' } | undefined;
     LoginPage: undefined;
-    Main: undefined;
+    BottomNav: undefined;
+};
+
+//// USER ///
+ 
+export type UserType = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  email: string;
+  role: string;
 };
 
   

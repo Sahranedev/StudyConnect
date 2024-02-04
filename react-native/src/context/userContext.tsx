@@ -1,14 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import jwtDecode from 'jwt-decode';
-
-type UserType = {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  role: string;
-};
+import { UserType } from '../types/types';
 
 const UserContext = createContext<{ user: UserType | null; setUser: React.Dispatch<React.SetStateAction<UserType | null>> }>({ user: null, setUser: () => {} });
 
