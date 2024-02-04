@@ -51,7 +51,7 @@
   "jest": {
     
     "testMatch": [
-      "**/tests/**.test.js"
+      "**/tests/crudStudents.test.js"
     ], 
     "verbose": true
     

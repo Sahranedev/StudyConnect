@@ -1,13 +1,11 @@
 const request = require("supertest");
 const app = require("../app");
 const { closePool } = require("../models/index");
-const prisma = require("../../prisma/client");
-const { parse } = require("date-fns");
 
 // LIRE LES ETUDIANTS
 
 describe("GET /api/students", () => {
-  it("should return all students with status 200 and the correct structure", async () => {
+  it("doit retourner les étudiants avec un status 200 et la bonne structure", async () => {
     const response = await request(app).get("/api/students");
 
     expect(response.status).toBe(200);
@@ -72,7 +70,7 @@ describe("GET /api/students", () => {
     }
   });
 
-  it("should return 404 for non-existent route", async () => {
+  it("doit retourner une erreur 404 pour route inexistante", async () => {
     const response = await request(app).get("/api/nonexistentroute");
 
     expect(response.status).toBe(404);
@@ -84,14 +82,14 @@ describe("GET /api/students", () => {
 describe("POST /api/students", () => {
   let createdStudentId;
 
-  it("should create a student user successfully", async () => {
+  it("doit créer avec succès un étudiant", async () => {
     const newStudent = {
       firstname: "Traümerei",
       lastname: "Lo Po Bia",
-      email: "traumerei301@example.com",
+      email: "traumerei@example.com",
       password: "password",
       progress: "In progress",
-      curriculum: "Advanced Mathematics",
+      curriculum: "Advanced Chess",
       points: 10,
     };
 
@@ -113,18 +111,18 @@ describe("POST /api/students", () => {
         );
         expect(response.status).toBe(200);
       } else {
-        throw new Error("No student was created to delete");
+        throw new Error("Aucun étudiant n'a été créé pour être supprimé.");
       }
     });
   });
 
-  it("Doit retourner une erreur 400 si un champ obligatoire  est manquant lors de la création de l'Étudiant, ici c'est email", async () => {
+  it("doit retourner une erreur 400 si un champ obligatoire  est manquant lors de la création de l'étudiant, ici c'est email", async () => {
     const newStudent = {
       firstname: "Traümerei",
       lastname: "Lo Po Bia",
       password: "password",
       progress: "In progress",
-      curriculum: "Advanced Mathematics",
+      curriculum: "Advanced Chess",
       points: 10,
     };
 

@@ -1,12 +1,13 @@
 {
-  "name": "code_lingo",
+  "name": "study_connect",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently -n \"REACT-WEB,BACKEND\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev --prefix react-web\" \"npm run dev --prefix backend\""
-
+    "dev": "concurrently -n \"REACT-WEB,BACKEND\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run dev --prefix react-web\" \"npm run dev --prefix backend\"",
+    "dev-native": "concurrently -n \"REACT-NATIVE,BACKEND\" -c \"bgGreen.bold,bgMagenta.bold\" \"cd react-native && expo start\" \"npm run dev --prefix backend\""
   },
+
   "author": "Sahrane Guassemi",
   "license": "ISC",
   "devDependencies": {

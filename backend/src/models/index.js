@@ -51,11 +51,4 @@ const handler = {
   },
 };
 
-async function closePool() {
-  await pool.end();
-}
-
-module.exports = {
-  models: new Proxy(models, handler),
-  closePool,
-};
+module.exports = new Proxy(models, handler);

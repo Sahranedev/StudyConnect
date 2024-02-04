@@ -1,5 +1,5 @@
 {
-  "name": "toto",
+  "name": "study_connect_mobile_app",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -10,16 +10,18 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.18.2",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/drawer": "^6.6.3",
     "@react-navigation/native-stack": "^6.9.13",
+    "@react-navigation/stack": "^6.3.20",
     "expo": "~49.0.10",
     "expo-secure-store": "~12.3.1",
     "expo-status-bar": "~1.6.0",
     "jwt-decode": "^3.1.2",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
-    "react-native": "0.72.4",
+    "react-native": "0.72.6",
     "react-native-gesture-handler": "~2.12.0",
     "react-native-reanimated": "~3.3.0",
     "react-native-svg": "13.9.0",
@@ -29,7 +31,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
-    "@types/node": "^20.6.0",
+    "@types/node": "^20.11.16",
     "@types/react": "~18.2.14",
     "@types/react-native": "^0.72.2",
     "react-native-dotenv": "^3.4.9",

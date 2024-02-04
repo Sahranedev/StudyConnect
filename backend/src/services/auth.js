@@ -33,6 +33,9 @@ const hashPassword = (req, res, next) => {
 };
 
 const verifyPassword = (req, res) => {
+  console.log("Hashed password from DB:", req.user.password);
+  console.log("Plain password from request:", req.body.password);
+
   argon2
     .verify(req.user.password, req.body.password, hashingOptions)
     .then((isVerified) => {
