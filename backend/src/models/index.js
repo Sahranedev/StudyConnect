@@ -1,6 +1,7 @@
 const fs = require("fs");
 const mysql = require("mysql2/promise");
 const path = require("path");
+require("dotenv").config();
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
@@ -20,6 +21,19 @@ pool.getConnection().catch(() => {
     "Routes using models won't work as intended"
   );
 });
+
+const app = require("../app");
+
+const port = parseInt(process.env.APP_PORT ?? "5000", 10);
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+app.get("/"),
+  (req, res) => {
+    res.send("hello Sahrane");
+  };
 
 const models = fs
   .readdirSync(__dirname)

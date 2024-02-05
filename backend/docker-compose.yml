@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: password
+      DB_NAME: study_connect
+    depends_on:
+      - db
+    command: >
+      sh -c "
+      ./wait-for-it.sh db:3306 --timeout=30 --strict -- 
+      npx prisma migrate deploy && 
+      node ./src/models/index.js"
+    volumes:
+      - .:/express-js
+      - ./wait-for-it.sh:/express-js/wait-for-it.sh
+
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: study_connect
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
