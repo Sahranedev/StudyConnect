@@ -1,8 +1,9 @@
 # Dockerfile
 FROM node:lts-alpine
 
-# Installer bash
-RUN apk add --no-cache bash
+
+# Installation de bash et des outils de build nécessaires pour les dépendances natives
+RUN apk add --no-cache bash alpine-sdk python3
 
 # Déclaration de l'environnement
 ENV NODE_ENV development
@@ -20,7 +21,7 @@ RUN npm install
 RUN npx prisma generate
 
 # Commande pour démarrer l'application
-CMD ["node", "./src/models/index.js"]
+CMD ["node", "./src/models/index.js"] 
 
 # Exposition du port du serveur
 EXPOSE 5000

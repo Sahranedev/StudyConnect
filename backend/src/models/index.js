@@ -6,11 +6,11 @@ require("dotenv").config();
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
 const pool = mysql.createPool({
-  host: DB_HOST,
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
+  host: "db",
+  port: 3306,
+  user: "root",
+  password: "password",
+  database: "study_connect",
 });
 
 pool.getConnection().catch(() => {
@@ -26,14 +26,9 @@ const app = require("../app");
 
 const port = parseInt(process.env.APP_PORT ?? "5000", 10);
 
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-app.get("/"),
-  (req, res) => {
-    res.send("hello Sahrane");
-  };
 
 const models = fs
   .readdirSync(__dirname)
