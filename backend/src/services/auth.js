@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const { JWT_SECRET, JWT_TIMING } = process.env;
 
-const saltRounds = 12;
+const saltRounds = 10;
 
 const hashPassword = async (req, res, next) => {
   const { password } = req.body;

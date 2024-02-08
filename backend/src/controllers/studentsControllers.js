@@ -68,6 +68,9 @@ const readStudentById = async (req, res) => {
         user: true,
       },
     });
+    if (!student) {
+      return res.status(404).send(`Aucun étudiant trouvé avec l'ID ${id}`);
+    }
     res.status(200).send(student);
   } catch (error) {
     console.error(error);

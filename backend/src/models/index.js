@@ -1,15 +1,16 @@
 const fs = require("fs");
 const mysql = require("mysql2/promise");
 const path = require("path");
+require("dotenv").config();
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
 const pool = mysql.createPool({
-  host: DB_HOST,
-  port: DB_PORT,
-  user: DB_USER,
-  password: DB_PASSWORD,
-  database: DB_NAME,
+  host: "db",
+  port: 3306,
+  user: "root",
+  password: "password",
+  database: "study_connect",
 });
 
 pool.getConnection().catch(() => {
@@ -19,6 +20,14 @@ pool.getConnection().catch(() => {
     "Did you create a .env file with valid credentials?",
     "Routes using models won't work as intended"
   );
+});
+
+const app = require("../app");
+
+const port = parseInt(process.env.APP_PORT ?? "5000", 10);
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
 const models = fs

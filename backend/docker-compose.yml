@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+        - .env
+    environment:
+      DOCKER_DB_HOST: ${DOCKER_DB_HOST}
+      DOCKER_DB_USER: ${DOCKER_DB_USER}
+      DOCKER_DB_PASSWORD: ${DOCKER_DB_PASSWORD}
+      DOCKER_DB_NAME: ${DOCKER_DB_NAME}
+          
+    depends_on:
+      - db
+    command: >
+      sh -c "
+      ./wait-for-it.sh db:3306 --timeout=30 --strict -- 
+      npx prisma migrate deploy && 
+      node ./src/models/index.js"
+    volumes:
+      - .:/express-js
+      - ./wait-for-it.sh:/express-js/wait-for-it.sh
+
+  db:
+    image: mysql
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_PASSWORD}
+      MYSQL_DATABASE: ${DOCKER_DB_NAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

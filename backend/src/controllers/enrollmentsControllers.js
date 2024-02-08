@@ -1,18 +1,6 @@
 const models = require("../models");
 const prisma = require("../../prisma/client");
 
-const browse = (req, res) => {
-  models.enrollments
-    .findAll()
-    .then(([rows]) => {
-      res.send(rows);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.sendStatus(500);
-    });
-};
-
 const getEnrollements = async (req, res) => {
   try {
     const enrollements = await prisma.enrollments.findMany();
@@ -170,7 +158,6 @@ const destroy = (req, res) => {
 };
 
 module.exports = {
-  browse,
   read,
   edit,
   add,
