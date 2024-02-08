@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../app");
-const { closePool } = require("../models/index");
+const app = require("../app.js");
+const { closePool } = require("../models/index.js");
 
 // LIRE LES ETUDIANTS
 

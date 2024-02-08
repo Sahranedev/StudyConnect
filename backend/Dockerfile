@@ -1,9 +1,10 @@
-# Dockerfile
-FROM node:lts-alpine
+#Dockerfile pour l'application StudyConnect
 
+# Utilisation de l'image de node, je choisis la même version qu'en local
+FROM node:20.9.0
 
-# Installation de bash et des outils de build nécessaires pour les dépendances natives
-RUN apk add --no-cache bash alpine-sdk python3
+# Mise à jour de la liste des paquets et installation de bash et des outils de build nécessaires
+RUN apt-get update && apt-get install -y bash build-essential python3
 
 # Déclaration de l'environnement
 ENV NODE_ENV development

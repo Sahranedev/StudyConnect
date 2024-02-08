@@ -4,12 +4,14 @@ services:
     build: .
     ports:
       - "5000:5000"
+    env_file:
+        - .env
     environment:
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: password
-      DB_NAME: study_connect
+      DOCKER_DB_HOST: ${DOCKER_DB_HOST}
+      DOCKER_DB_USER: ${DOCKER_DB_USER}
+      DOCKER_DB_PASSWORD: ${DOCKER_DB_PASSWORD}
+      DOCKER_DB_NAME: ${DOCKER_DB_NAME}
+          
     depends_on:
       - db
     command: >
@@ -23,9 +25,12 @@ services:
 
   db:
     image: mysql
+    restart: always
+    env_file:
+      - .env
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: study_connect
+      MYSQL_ROOT_PASSWORD: ${DOCKER_DB_PASSWORD}
+      MYSQL_DATABASE: ${DOCKER_DB_NAME}
     ports:
       - "3306:3306"
     volumes:

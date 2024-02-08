@@ -29,6 +29,8 @@ const getOneUserById = async (req, res) => {
         preferredLanguage: true,
       },
     });
+    if (!oneUserById) return res.status(404).send("Utilisateur non trouvé");
+
     res.send(oneUserById);
   } catch (error) {
     console.error(error);

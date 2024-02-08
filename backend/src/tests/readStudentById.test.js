@@ -1,6 +1,8 @@
 const supertest = require("supertest");
 const express = require("express");
 const { prisma } = require("../../prisma/client");
+const app = express();
+
 const { readStudentById } = require("../controllers/studentsControllers");
 
 jest.mock("../../prisma/client", () => ({
@@ -26,8 +28,6 @@ jest.mock("../../prisma/client", () => ({
   },
 }));
 
-const app = express();
-app.use(express.json());
 app.get("/api/students/:id", readStudentById);
 
 describe("GET /api/students/:id", () => {
