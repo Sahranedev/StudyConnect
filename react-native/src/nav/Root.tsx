@@ -2,20 +2,19 @@ import { useEffect, useState } from "react";
 import { Pressable } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import type { RootDrawerParamList } from "../types/types"
+import type { RootDrawerParamList } from "../types/types";
 
 import { Ionicons } from "@expo/vector-icons";
 import * as SecureStore from "expo-secure-store";
 
-
-import { useUser } from "../context/userContext";
-import Home from "../pages/Home";
+import { useCurrentUserContext } from "../context/userContext";
 import LoginPage from "../pages/LoginPage";
-
+import BottomNav from "../components/NavBar/BottomNav";
+import RegisterPage from "../pages/RegisterPage";
 
 const Stack = createStackNavigator<RootDrawerParamList>();
 
-const generateScreenOptions = ({ navigation }) => ({
+const generateScreenOptions = ({ navigation }: any) => ({
   headerLeft: () => (
     <Pressable onPress={navigation.goBack}>
       <Ionicons
@@ -30,16 +29,22 @@ const generateScreenOptions = ({ navigation }) => ({
 });
 
 export default function Root() {
-    const [dataToken, setDataToken] = useState<string | null>(null);
-    const { user } = useUser();
+  const [dataToken, setDataToken] = useState<string | null>(null);
+  const { user } = useCurrentUserContext();
+
+  const fetchDataToken = async () => {
+    try {
+      const token = await SecureStore.getItemAsync("userToken");
+      setDataToken(token);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la récupération du token utilisateur :",
+        error
+      );
+    }
+  };
 
   useEffect(() => {
-    const fetchDataToken = async () => {
-      const data = await SecureStore.getItemAsync("userToken");
-        if (data !== null) {
-            setDataToken(JSON.parse(data));
-        }
-    };
     fetchDataToken();
   }, [user]);
 
@@ -54,28 +59,28 @@ export default function Root() {
           },
         }}
       >
-        {!dataToken?.token ? (
+        {!dataToken ? (
           <>
             <Stack.Screen
               name="LoginPage"
               component={LoginPage}
               options={{ headerShown: false }}
             />
-    
-        
+            <Stack.Screen
+              name="RegisterPage"
+              component={RegisterPage}
+              options={generateScreenOptions}
+            />
           </>
         ) : (
           <>
             <Stack.Group>
               <Stack.Screen
-                name="Home"
-                component={Home}
+                name="BottomNav"
+                component={BottomNav}
                 options={{ headerShown: false }}
               />
-            
             </Stack.Group>
-            
-
           </>
         )}
       </Stack.Navigator>

@@ -1,3 +1,39 @@
+const { pool } = require("../models/index");
+
+const getUserByEmailWithPasswordAndPassToNext = async (req, res, next) => {
+  const { email } = req.body;
+
+  const findByEmailWithPassword = async (email) => {
+    try {
+      const [results, fields] = await pool.query(
+        `SELECT u.*, s.id AS student_id, s.progress, s.lastActivity, s.curriculum, s.points, s.classroom_id, t.id AS teacher_id
+         FROM user u
+         LEFT JOIN students s ON u.id = s.user_id
+         LEFT JOIN teachers t ON u.id = t.user_id
+         WHERE u.email = ?`,
+        [email]
+      );
+      return results[0];
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  try {
+    const user = await findByEmailWithPassword(email);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+};
+
 /* const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -31,25 +67,6 @@ const getUserByEmailWithPasswordAndPassToNext = async (req, res, next) => {
   }
 };
  */
-const models = require("../models");
-
-const getUserByEmailWithPasswordAndPassToNext = (req, res, next) => {
-  const { email } = req.body;
-
-  models.user
-    .findByEmailWithPassword(email)
-    .then((user) => {
-      if (!user) {
-        return res.status(404).send("User not found");
-      }
-      req.user = user;
-      next();
-    })
-    .catch((error) => {
-      console.error(error);
-      res.sendStatus(500);
-    });
-};
 
 module.exports = {
   getUserByEmailWithPasswordAndPassToNext,

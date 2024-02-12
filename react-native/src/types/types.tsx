@@ -1,8 +1,9 @@
 export type RootDrawerParamList = {
     Home: undefined;
     MesCours: undefined;
-    Contact: { sort: 'latest' | 'top' } | undefined;
-    LoginPage: undefined;
+    Profil: undefined;
+  LoginPage: undefined;
+    RegisterPage: undefined;
     BottomNav: undefined;
 };
 

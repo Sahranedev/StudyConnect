@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
-import { useUser } from '../context/userContext';
+import { useCurrentUserContext} from '../context/userContext';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootDrawerParamList } from "../types/types";
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 });
 
 export default function MesCours({ navigation }: Props) {
-  const { user } = useUser();
+  const { user } = useCurrentUserContext();
   const [course, setCourse] = useState({
     name: '',
     language: '',
@@ -60,7 +60,7 @@ export default function MesCours({ navigation }: Props) {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const myHeaders = new Headers();
     myHeaders.append('Content-Type', 'application/json');
 
@@ -73,28 +73,36 @@ export default function MesCours({ navigation }: Props) {
     };
 
     if (course.name && course.description && course.language) {
-      fetch(`${apiUrl}/api/courses`, requestOptions)
-        .then((response) => {
-          if (response.status !== 201) {
-            Toast.show({
-              type: 'error',
-              text1: 'Le cours n\'a pas pu être déclaré',
-              text2: 'Veuillez vérifier les informations saisies',
-            });
-          }
-          return response.text();
-        })
-        .then(() => {
-          showToast();
-          setTimeout(() => {
-            navigation.navigate('Home');
-          }, 1000);
-          resetState();
+      try {
 
-        })
-        .catch((error) => console.error(error));
+        const response = await fetch(`${apiUrl}/api/courses`, requestOptions);
+        const result = await response.json();
+        
+        if (result.status !== 201) {
+          Toast.show({
+            type: 'error',
+            text1: 'Le cours n\'a pas pu être déclaré',
+            text2: 'Veuillez vérifier les informations saisies',
+          });
+        } else {
+       
+    
+        
+        showToast();
+        setTimeout(() => {
+          navigation.navigate('Home');
+        }, 1000);
+          resetState();
+        }
+        
+      } catch (error) {
+        console.error('Erreur lors de la déclaration du cours :', error);
+
+        
+        
     }
-  };
+    };
+  }
 
   return (
     <View style={styles.container}>

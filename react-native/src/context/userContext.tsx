@@ -1,37 +1,64 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useMemo, ReactNode, useEffect, useState } from "react";
+import { BaseUser, Teacher, Student, UserType } from "../interfaces/User";
 import * as SecureStore from 'expo-secure-store';
-import jwtDecode from 'jwt-decode';
-import { UserType } from '../types/types';
 
-const UserContext = createContext<{ user: UserType | null; setUser: React.Dispatch<React.SetStateAction<UserType | null>> }>({ user: null, setUser: () => {} });
+interface CurrentUserContextType {
+  user: UserType | null; // Modification ici
+  setUser: (user: UserType | null) => Promise<void>; // Modification ici
+  token: string;
+  setToken: (token: string) => Promise<void>;
+}
 
-export const useUser = () => {
-  return useContext(UserContext);
+const defaultValue: CurrentUserContextType = {
+  user: null, 
+  setUser: async () => {},
+  token: "",
+  setToken: async () => {},
 };
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserType | null>(null);
+const CurrentUserContext = createContext<CurrentUserContextType>(defaultValue);
+
+interface CurrentUserContextProviderProps {
+  children: ReactNode;
+}
+
+export const CurrentUserContextProvider: React.FunctionComponent<CurrentUserContextProviderProps> = ({ children }) => {
+  const [user, setUserState] = useState<UserType | null>(defaultValue.user); // Modification ici
+  const [token, setTokenState] = useState<string>(defaultValue.token);
 
   useEffect(() => {
-    const getTokenAndDecode = async () => {
-      const token = await SecureStore.getItemAsync('userToken');
-      if (token) {
-        try {
-          
-          const decoded = jwtDecode(token) as UserType;
-          setUser(decoded);
-        } catch (error) {
-          console.error("JWT decoding failed:", error);
-        }
-      }
-    };
-    
-    getTokenAndDecode();
+    (async () => {
+      const storedUser = await SecureStore.getItemAsync('user');
+      if (storedUser) setUserState(JSON.parse(storedUser));
+      
+      const storedToken = await SecureStore.getItemAsync('token');
+      if (storedToken) setTokenState(storedToken);
+    })();
   }, []);
 
+  const setUser = async (newUser: UserType | null) => {
+    setUserState(newUser);
+    const userData = newUser ? JSON.stringify(newUser) : null;
+    await SecureStore.setItemAsync('user', userData ?? '');
+  };
+
+  const setToken = async (newToken: string) => {
+    setTokenState(newToken);
+    await SecureStore.setItemAsync('token', newToken);
+  };
+
+  const value = useMemo(() => ({
+    user,
+    setUser,
+    token,
+    setToken,
+  }), [user, token]);
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <CurrentUserContext.Provider value={value}>
       {children}
-    </UserContext.Provider>
+    </CurrentUserContext.Provider>
   );
 };
+
+export const useCurrentUserContext = (): CurrentUserContextType => useContext(CurrentUserContext);

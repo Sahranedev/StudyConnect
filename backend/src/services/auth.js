@@ -14,11 +14,9 @@ const hashPassword = async (req, res, next) => {
   }
 
   try {
-    console.log("je suis dans hashPassword");
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     req.body.hashedPassword = hashedPassword;
     delete req.body.password;
-    console.log("Hashed password:", hashedPassword);
     next();
   } catch (err) {
     console.error("Error hashing password:", err);

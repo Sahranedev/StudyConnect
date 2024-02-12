@@ -38,7 +38,7 @@ const createStudentUser = async (req, res) => {
   } catch (error) {
     console.error(error);
 
-    res.sendStatus(400);
+    res.sendStatus(500);
   }
 };
 

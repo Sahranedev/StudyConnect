@@ -23,6 +23,45 @@ const formatCourseDate = (course) => {
   };
 };
 
+const createCourses = async (req, res) => {
+  const {
+    name,
+    description,
+    teacher_id,
+    date,
+    start_time,
+    end_time,
+    seat_count,
+  } = req.body;
+  try {
+    let course = await prisma.courses.create({
+      data: {
+        name,
+        description,
+        teacher_id,
+        seat_count,
+        date,
+        start_time,
+        end_time,
+      },
+      include: {
+        teachers: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    course = formatCourseDate(course);
+
+    res.status(201).send(course);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+};
+
 const getAllCourses = async (req, res) => {
   try {
     const getCourses = await prisma.courses.findMany({
@@ -145,8 +184,8 @@ const getCoursesByStudent = async (req, res) => {
 
 const getCoursesByStudentForToday = async (req, res) => {
   const student_id = parseInt(req.params.id);
-  const todayStart = formatISO(startOfDay(new Date()));
-  const todayEnd = formatISO(endOfDay(new Date()));
+  const todayStart = startOfDay(new Date());
+  const todayEnd = endOfDay(new Date());
 
   try {
     const studentEnrollments = await prisma.enrollments.findMany({
@@ -181,7 +220,13 @@ const getCoursesByStudentForToday = async (req, res) => {
           include: {
             teachers: {
               include: {
-                user: true,
+                user: {
+                  select: {
+                    firstname: true,
+                    lastname: true,
+                    email: true,
+                  },
+                },
               },
             },
           },
@@ -305,45 +350,6 @@ const getTeacherCoursesForNext7Days = async (req, res) => {
       );
       res.status(200).send({ hasCourses: true, courses: formattedCourses });
     }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-};
-
-const createCourses = async (req, res) => {
-  const {
-    name,
-    description,
-    teacher_id,
-    date,
-    start_time,
-    end_time,
-    seat_count,
-  } = req.body;
-  try {
-    let course = await prisma.courses.create({
-      data: {
-        name,
-        description,
-        teacher_id,
-        seat_count,
-        date,
-        start_time,
-        end_time,
-      },
-      include: {
-        teachers: {
-          include: {
-            user: true,
-          },
-        },
-      },
-    });
-
-    course = formatCourseDate(course);
-
-    res.status(201).send(course);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);

@@ -2,8 +2,6 @@ const request = require("supertest");
 const app = require("../app.js");
 const { closePool } = require("../models/index.js");
 
-// LIRE LES ETUDIANTS
-
 describe("GET /api/students", () => {
   it("doit retourner les étudiants avec un status 200 et la bonne structure", async () => {
     const response = await request(app).get("/api/students");
@@ -37,7 +35,7 @@ describe("GET /api/students", () => {
   });
 
   it("retourne un étudiant avec son id", async () => {
-    const id = 22;
+    const id = 4;
     const response = await request(app).get(`/api/students/${id}`);
 
     expect(response.status).toBe(200);
@@ -116,7 +114,7 @@ describe("POST /api/students", () => {
     });
   });
 
-  it("doit retourner une erreur 400 si un champ obligatoire  est manquant lors de la création de l'étudiant, ici c'est email", async () => {
+  it("doit retourner une erreur 500 si un champ obligatoire  est manquant lors de la création de l'étudiant, ici c'est email", async () => {
     const newStudent = {
       firstname: "Traümerei",
       lastname: "Lo Po Bia",
@@ -127,7 +125,7 @@ describe("POST /api/students", () => {
     };
 
     const response = await request(app).post("/api/students").send(newStudent);
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(500);
   });
 });
 
