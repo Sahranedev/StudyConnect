@@ -22,7 +22,10 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
-          MYSQL_DATABASE: code_lingo
+          MYSQL_DATABASE: code_lingoenv:
+          DATABASE_URL: mysql://sahrane:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/code_lingo
+
+
 
     steps:
       - name: Checkout Code

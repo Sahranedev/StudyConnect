@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-
   TouchableOpacity,
   Text,
   Image,
@@ -30,29 +29,29 @@ export default function LoginPage({ navigation }: Props) {
       setErrorMessage("Please specify email and password");
       return;
     }
-  
+
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-  
+
     const body = JSON.stringify({
       email,
       password,
     });
-  
+
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body,
     };
-  
+
     try {
       const response = await fetch(`${apiUrl}/api/login`, requestOptions);
       const result = await response.json();
-  
+
       if (result.token && result.user) {
         console.log("data du user :", result.user);
         await SecureStore.setItemAsync("userToken", result.token);
-        
+
         setUser(result.user);
       } else {
         setErrorMessage("Authentication failed");
@@ -61,8 +60,6 @@ export default function LoginPage({ navigation }: Props) {
       setErrorMessage("An error occurred");
     }
   };
-  
-  
 
   return (
     <SafeAreaView className="bg-blue-900 min-h-full">
@@ -74,7 +71,7 @@ export default function LoginPage({ navigation }: Props) {
         />
       </View>
       <View className="flex flex-col justify-center items-center text-xl text-white ">
-        <Text className="text-white text-2xl mb-6">Se connecter</Text>
+        <Text className="text-white text-2xl mb-6">Se Connecter</Text>
         <View className="w-80">
           <TextInput
             placeholder="Adresse Email"
