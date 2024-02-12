@@ -40,6 +40,6 @@ jobs:
         run: npm test
         env:
           MYSQL_HOST: localhost
-          MYSQL_USER: root
+          MYSQL_USER: sahrane
           MYSQL_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
           MYSQL_DB: code_lingo
