@@ -1,21 +1,18 @@
 {
   "name": "study_connect_server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
     "migrate": "node migrate.js",
     "start": "node index.js",
     "lint": "echo '----- Checking Backend...' && npx prettier --debug-check . && eslint --ext .js . && echo '----- Done!'",
     "fix": "prettier --write . && eslint --fix --ext .js .",
-    "test": "jest"
+    "test": "jest",
+    "prisma:seed": "prisma db seed"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.9.1",
+    "prisma": "^5.9.1",
     "argon2": "^0.30.3",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",

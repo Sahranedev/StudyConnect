@@ -35,7 +35,7 @@ describe("GET /api/students", () => {
   });
 
   it("retourne un étudiant avec son id", async () => {
-    const id = 4;
+    const id = 1;
     const response = await request(app).get(`/api/students/${id}`);
 
     expect(response.status).toBe(200);
