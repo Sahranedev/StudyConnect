@@ -17,7 +17,7 @@ jobs:
         image: mysql
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
-          MYSQL_DATABASE: code_lingo
+          MYSQL_DATABASE: study_connect
         ports:
           - 3306:3306
 
@@ -37,17 +37,17 @@ jobs:
       - name: Prisma Migrate
         run: npx prisma migrate deploy
         env:
-          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/code_lingo
+          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/study_connect
         working-directory: ./backend
 
       - name: Prisma Seed
         run: npx prisma db seed
         env:
-          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/code_lingo
+          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/study_connect
         working-directory: ./backend
 
       - name: Exécution des tests d'intégration
         run: npm test
         env:
-          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/code_lingo
+          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/study_connect
         working-directory: ./backend
