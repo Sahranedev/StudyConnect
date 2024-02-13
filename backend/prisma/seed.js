@@ -7,14 +7,21 @@ async function main() {
       lastname: "Actions",
       email: "github@actions.com",
       password: "password",
-      progress: "In progress",
-      curriculum: "Advanced Chess",
-      points: 10,
+      role: "Student",
+      students: {
+        create: {
+          progress: "In progress",
+          curriculum: "Advanced Chess",
+          points: 10,
+        },
+      },
+    },
+    include: {
+      students: true,
     },
   });
-  console.log(
-    `Nouvel utilisateur créé: ${TestUser.firstname} (ID: ${TestUser.id})`
-  );
+
+  console.log(`User created: ${TestUser.firstname} ${TestUser.lastname}`);
 }
 
 main()
