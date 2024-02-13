@@ -22,10 +22,10 @@ jobs:
           - 3306:3306
 
     steps:
-      - name: Checkout Code
+      - name: Récupération du code source
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Configuration de l'environnnement Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20.9.0"
