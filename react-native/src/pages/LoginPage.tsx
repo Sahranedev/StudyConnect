@@ -62,10 +62,10 @@ export default function LoginPage({ navigation }: Props) {
   };
 
   return (
-    <SafeAreaView className="bg-blue-900 min-h-full">
+    <SafeAreaView className="bg-gray-600 min-h-full">
       <View className="flex justify-center items-center pt-12">
         <Image
-          source={require("../../assets/CodeLingoLogo.png")}
+          source={require("../../assets/study_connect_logo.png")}
           className="w-48 h-48"
           resizeMode="contain"
         />
@@ -120,14 +120,14 @@ export default function LoginPage({ navigation }: Props) {
       </Text>
       <View className="flex items-center justify-center">
         <TouchableOpacity className="mt-4 mb-8">
-          <View className="w-64 h-14 rounded-full border-4 border-black bg-white flex items-center justify-center">
+          <View className="w-64 h-14 rounded-full  bg-white flex items-center justify-center">
             <Text className="text-black text-xl text-center">S'inscrire</Text>
           </View>
         </TouchableOpacity>
       </View>
 
       <View className="">
-        <Text className="text-white text-center">Code-Lingo.fr</Text>
+        <Text className="text-white text-center">studyconnect.fr</Text>
         <Text className="text-white text-center">Mention Légal/FAQ</Text>
       </View>
     </SafeAreaView>

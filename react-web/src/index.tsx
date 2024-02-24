@@ -1,10 +1,9 @@
-
 import App from "./App";
 import HomePage from "./pages/StudentPages/HomePage";
 import Login from "./pages/Login";
-import MyCourses from "./pages/MyCourses";
+import MyCourses from "./pages/StudentPages/MyCourses";
 import SignUp from "./pages/SignUp";
-import ClassRoom from "./pages/ClassRoom";
+import ClassRoom from "./pages/StudentPages/ClassRoom";
 import Profile from "./pages/Profile";
 import TeacherRoute from "./Routes/TeacherRoute";
 import StudentRoute from "./Routes/StudentRoute";
@@ -51,10 +50,9 @@ const Routes = [
           <TeacherRoute>
             <TeacherHomePage />
           </TeacherRoute>
-        )
-
+        ),
       },
-    
+
       {
         path: "/professeur/mes-cours",
         element: (

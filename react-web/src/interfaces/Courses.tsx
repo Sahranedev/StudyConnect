@@ -1,6 +1,6 @@
 interface Teacher {
   id: number;
-  userID: number;
+  user_id: number;
   qualifications: string;
   bio: string;
   expertiseField: string;
@@ -42,5 +42,4 @@ export interface ApiResponse {
   courses: Course[];
   hasCourse: boolean;
   available: boolean;
-
 }

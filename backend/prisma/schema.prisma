@@ -29,6 +29,15 @@ model courses {
   enrollments  enrollments[]
   classroom    classroom?    @relation(fields: [classroom_id], references: [id])
   classroom_id Int?
+
+  categories    categories? @relation(fields: [categories_id], references: [id])
+  categories_id Int?
+}
+
+model categories {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique @db.VarChar(50)
+  courses courses[]
 }
 
 model enrollments {
