@@ -17,15 +17,15 @@ jobs:
         image: mysql
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.CI_DB_PASSWORD }}
-          MYSQL_DATABASE: code_lingo
+          MYSQL_DATABASE: ${{secrets.CI_DB_NAME }}
         ports:
           - 3306:3306
 
     steps:
-      - name: Checkout Code
+      - name: Récupération du code source
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Configuration de l'environnnement Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20.9.0"
@@ -37,17 +37,17 @@ jobs:
       - name: Prisma Migrate
         run: npx prisma migrate deploy
         env:
-          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/code_lingo
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         working-directory: ./backend
 
       - name: Prisma Seed
         run: npx prisma db seed
         env:
-          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/code_lingo
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         working-directory: ./backend
 
       - name: Exécution des tests d'intégration
         run: npm test
         env:
-          DATABASE_URL: mysql://root:${{ secrets.CI_DB_PASSWORD }}@localhost:3306/code_lingo
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         working-directory: ./backend

@@ -4,31 +4,31 @@ import { FaCalendarAlt } from "react-icons/fa";
 import { FaClock } from "react-icons/fa6";
 import { ImPriceTag } from "react-icons/im";
 import { FaBell } from "react-icons/fa";
-import { FaPlay } from "react-icons/fa";
 
 import { Course } from "../../interfaces/Courses";
 import DeleteEnrollement from "./enrollementButton/DeleteEnrollement";
 import SubmitEnrollement from "./enrollementButton/SubmitEnrollement";
 
 interface NextCardCourseComponentProps {
-    nextcourse: Course;
+  nextcourse: Course;
   handleCourseEnrollements: (courseId: number) => Promise<void>;
   deleteEnrollement: (enrollmentId: number, courseId: number) => Promise<void>;
 }
 
 const CardNextCourse: React.FC<NextCardCourseComponentProps> = ({
-  nextcourse, handleCourseEnrollements, deleteEnrollement
+  nextcourse,
+  handleCourseEnrollements,
+  deleteEnrollement,
 }) => {
-
-    console.log("data next course:", nextcourse)
+  console.log("data next course:", nextcourse);
   return (
     <div className="flex justify-center mb-6">
       <div className=" h-44 w-[21rem] bg-darkGrey rounded-xl">
         <div className="flex ml-4 mt-2 gap-3">
           <img src={soniaAvatar} alt="" className="h-8 w-8 rounded-full" />
           <p className="text-xl text-white">
-            {nextcourse.teachers.user.firstname}{" "}
-            {nextcourse.teachers.user.lastname}
+            {nextcourse.teachers?.user?.firstname}{" "}
+            {nextcourse.teachers?.user?.lastname}
           </p>
         </div>
         <div className="flex mt-3 ml-4 gap-5">
@@ -59,12 +59,20 @@ const CardNextCourse: React.FC<NextCardCourseComponentProps> = ({
               <p className=" font-normal">Être notifié</p>
             </div>
           </Button>
-                  
-                      <div className="flex gap-3 items-center">
-                          {nextcourse.isEnrolled ? <DeleteEnrollement nextcourse={nextcourse} deleteEnrollement={deleteEnrollement}  /> : <SubmitEnrollement nextcourse={nextcourse}  handleCourseEnrollements={handleCourseEnrollements}  />
-                          }
-            </div>
-          
+
+          <div className="flex gap-3 items-center">
+            {nextcourse.isEnrolled ? (
+              <DeleteEnrollement
+                nextcourse={nextcourse}
+                deleteEnrollement={deleteEnrollement}
+              />
+            ) : (
+              <SubmitEnrollement
+                nextcourse={nextcourse}
+                handleCourseEnrollements={handleCourseEnrollements}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

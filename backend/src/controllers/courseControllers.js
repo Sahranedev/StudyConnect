@@ -27,18 +27,29 @@ const createCourses = async (req, res) => {
   const {
     name,
     description,
+    categoryName,
     teacher_id,
     date,
     start_time,
     end_time,
     seat_count,
   } = req.body;
+
   try {
+    const category = await prisma.categories.findUnique({
+      where: { name: categoryName },
+    });
+
+    if (!category) {
+      return res.status(404).send({ message: "Category not found" });
+    }
+
     let course = await prisma.courses.create({
       data: {
         name,
         description,
         teacher_id,
+        categories_id: category.id,
         seat_count,
         date,
         start_time,
@@ -50,11 +61,11 @@ const createCourses = async (req, res) => {
             user: true,
           },
         },
+        categories: true,
       },
     });
 
     course = formatCourseDate(course);
-
     res.status(201).send(course);
   } catch (error) {
     console.error(error);
@@ -69,6 +80,11 @@ const getAllCourses = async (req, res) => {
         teachers: {
           include: {
             user: true,
+          },
+        },
+        categories: {
+          select: {
+            name: true,
           },
         },
       },
